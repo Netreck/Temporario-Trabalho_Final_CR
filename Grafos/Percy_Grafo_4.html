@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 1000px;
+                 height: 1000px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "White"}, "group": 3, "id": "Annabeth", "label": "Annabeth", "shape": "dot", "size": 38}, {"font": {"color": "White"}, "group": 1, "id": "Tyson", "label": "Tyson", "shape": "dot", "size": 33}, {"font": {"color": "White"}, "group": 0, "id": "Rachel", "label": "Rachel", "shape": "dot", "size": 17}, {"font": {"color": "White"}, "group": 3, "id": "Chiron", "label": "Chiron", "shape": "dot", "size": 31}, {"font": {"color": "White"}, "group": 4, "id": "Grover", "label": "Grover", "shape": "dot", "size": 27}, {"font": {"color": "White"}, "group": 2, "id": "Luke", "label": "Luke", "shape": "dot", "size": 29}, {"font": {"color": "White"}, "group": 0, "id": "Percy", "label": "Percy", "shape": "dot", "size": 27}, {"font": {"color": "White"}, "group": 3, "id": "Clarisse", "label": "Clarisse", "shape": "dot", "size": 16}, {"font": {"color": "White"}, "group": 4, "id": "Kronos", "label": "Kronos", "shape": "dot", "size": 27}, {"font": {"color": "White"}, "group": 1, "id": "Athena", "label": "Athena", "shape": "dot", "size": 21}, {"font": {"color": "White"}, "group": 1, "id": "Nico", "label": "Nico", "shape": "dot", "size": 21}, {"font": {"color": "White"}, "group": 1, "id": "Geryon", "label": "Geryon", "shape": "dot", "size": 17}, {"font": {"color": "White"}, "group": 1, "id": "Pan", "label": "Pan", "shape": "dot", "size": 22}, {"font": {"color": "White"}, "group": 4, "id": "Hera", "label": "Hera", "shape": "dot", "size": 14}, {"font": {"color": "White"}, "group": 0, "id": "Kelli", "label": "Kelli", "shape": "dot", "size": 14}, {"font": {"color": "White"}, "group": 4, "id": "Daedalus", "label": "Daedalus", "shape": "dot", "size": 20}, {"font": {"color": "White"}, "group": 3, "id": "Juniper", "label": "Juniper", "shape": "dot", "size": 8}, {"font": {"color": "White"}, "group": 0, "id": "Ethan", "label": "Ethan", "shape": "dot", "size": 9}, {"font": {"color": "White"}, "group": 2, "id": "Poseidon", "label": "Poseidon", "shape": "dot", "size": 23}, {"font": {"color": "White"}, "group": 4, "id": "Zeus", "label": "Zeus", "shape": "dot", "size": 17}, {"font": {"color": "White"}, "group": 3, "id": "Ares", "label": "Ares", "shape": "dot", "size": 11}, {"font": {"color": "White"}, "group": 2, "id": "Calypso", "label": "Calypso", "shape": "dot", "size": 12}, {"font": {"color": "White"}, "group": 1, "id": "Bianca", "label": "Bianca", "shape": "dot", "size": 14}, {"font": {"color": "White"}, "group": 0, "id": "Antaeus", "label": "Antaeus", "shape": "dot", "size": 10}, {"font": {"color": "White"}, "group": 0, "id": "Hermes", "label": "Hermes", "shape": "dot", "size": 14}, {"font": {"color": "White"}, "group": 1, "id": "Briares", "label": "Briares", "shape": "dot", "size": 7}, {"font": {"color": "White"}, "group": 4, "id": "Cyclopes", "label": "Cyclopes", "shape": "dot", "size": 7}, {"font": {"color": "White"}, "group": 2, "id": "Atlas", "label": "Atlas", "shape": "dot", "size": 8}, {"font": {"color": "White"}, "group": 0, "id": "Hades", "label": "Hades", "shape": "dot", "size": 17}, {"font": {"color": "White"}, "group": 3, "id": "Oracle", "label": "Oracle", "shape": "dot", "size": 5}, {"font": {"color": "White"}, "group": 2, "id": "Aphrodite", "label": "Aphrodite", "shape": "dot", "size": 12}, {"font": {"color": "White"}, "group": 3, "id": "Minotaur", "label": "Minotaur", "shape": "dot", "size": 2}, {"font": {"color": "White"}, "group": 1, "id": "Artemis", "label": "Artemis", "shape": "dot", "size": 11}, {"font": {"color": "White"}, "group": 1, "id": "Apollo", "label": "Apollo", "shape": "dot", "size": 10}, {"font": {"color": "White"}, "group": 2, "id": "Demeter", "label": "Demeter", "shape": "dot", "size": 7}, {"font": {"color": "White"}, "group": 3, "id": "Travis", "label": "Travis", "shape": "dot", "size": 3}, {"font": {"color": "White"}, "group": 2, "id": "Circe", "label": "Circe", "shape": "dot", "size": 4}, {"font": {"color": "White"}, "group": 1, "id": "Hestia", "label": "Hestia", "shape": "dot", "size": 3}, {"font": {"color": "White"}, "group": 3, "id": "Thalia", "label": "Thalia", "shape": "dot", "size": 2}, {"font": {"color": "White"}, "group": 2, "id": "Silena", "label": "Silena", "shape": "dot", "size": 6}, {"font": {"color": "White"}, "group": 1, "id": "Medusa", "label": "Medusa", "shape": "dot", "size": 4}, {"font": {"color": "White"}, "group": 0, "id": "Furies", "label": "Furies", "shape": "dot", "size": 2}, {"font": {"color": "White"}, "group": 4, "id": "Castor", "label": "Castor", "shape": "dot", "size": 7}, {"font": {"color": "White"}, "group": 4, "id": "Nemesis", "label": "Nemesis", "shape": "dot", "size": 4}, {"font": {"color": "White"}, "group": 1, "id": "Argus", "label": "Argus", "shape": "dot", "size": 4}, {"font": {"color": "White"}, "group": 2, "id": "Lee", "label": "Lee", "shape": "dot", "size": 3}, {"font": {"color": "White"}, "group": 2, "id": "Hyperion", "label": "Hyperion", "shape": "dot", "size": 1}, {"font": {"color": "White"}, "group": 4, "id": "Morpheus", "label": "Morpheus", "shape": "dot", "size": 6}, {"font": {"color": "White"}, "group": 2, "id": "Sally", "label": "Sally", "shape": "dot", "size": 3}]);
+                  edges = new vis.DataSet([{"Weight": 457, "from": "Annabeth", "to": "Tyson", "width": 1}, {"Weight": 301, "from": "Annabeth", "to": "Rachel", "width": 1}, {"Weight": 224, "from": "Annabeth", "to": "Chiron", "width": 1}, {"Weight": 197, "from": "Annabeth", "to": "Grover", "width": 1}, {"Weight": 177, "from": "Annabeth", "to": "Luke", "width": 1}, {"Weight": 119, "from": "Annabeth", "to": "Percy", "width": 1}, {"Weight": 117, "from": "Annabeth", "to": "Clarisse", "width": 1}, {"Weight": 108, "from": "Annabeth", "to": "Kronos", "width": 1}, {"Weight": 104, "from": "Annabeth", "to": "Athena", "width": 1}, {"Weight": 94, "from": "Annabeth", "to": "Nico", "width": 1}, {"Weight": 66, "from": "Annabeth", "to": "Geryon", "width": 1}, {"Weight": 61, "from": "Annabeth", "to": "Pan", "width": 1}, {"Weight": 58, "from": "Annabeth", "to": "Hera", "width": 1}, {"Weight": 57, "from": "Annabeth", "to": "Kelli", "width": 1}, {"Weight": 57, "from": "Annabeth", "to": "Daedalus", "width": 1}, {"Weight": 36, "from": "Annabeth", "to": "Juniper", "width": 1}, {"Weight": 34, "from": "Annabeth", "to": "Ethan", "width": 1}, {"Weight": 34, "from": "Annabeth", "to": "Poseidon", "width": 1}, {"Weight": 30, "from": "Annabeth", "to": "Zeus", "width": 1}, {"Weight": 22, "from": "Annabeth", "to": "Ares", "width": 1}, {"Weight": 21, "from": "Annabeth", "to": "Calypso", "width": 1}, {"Weight": 20, "from": "Annabeth", "to": "Bianca", "width": 1}, {"Weight": 18, "from": "Annabeth", "to": "Antaeus", "width": 1}, {"Weight": 16, "from": "Annabeth", "to": "Hermes", "width": 1}, {"Weight": 15, "from": "Annabeth", "to": "Briares", "width": 1}, {"Weight": 14, "from": "Annabeth", "to": "Cyclopes", "width": 1}, {"Weight": 10, "from": "Annabeth", "to": "Atlas", "width": 1}, {"Weight": 10, "from": "Annabeth", "to": "Hades", "width": 1}, {"Weight": 7, "from": "Annabeth", "to": "Oracle", "width": 1}, {"Weight": 6, "from": "Annabeth", "to": "Aphrodite", "width": 1}, {"Weight": 6, "from": "Annabeth", "to": "Minotaur", "width": 1}, {"Weight": 5, "from": "Annabeth", "to": "Artemis", "width": 1}, {"Weight": 2, "from": "Annabeth", "to": "Apollo", "width": 1}, {"Weight": 2, "from": "Annabeth", "to": "Demeter", "width": 1}, {"Weight": 2, "from": "Annabeth", "to": "Travis", "width": 1}, {"Weight": 1, "from": "Annabeth", "to": "Circe", "width": 1}, {"Weight": 1, "from": "Annabeth", "to": "Hestia", "width": 1}, {"Weight": 1, "from": "Annabeth", "to": "Thalia", "width": 1}, {"Weight": 248, "from": "Tyson", "to": "Grover", "width": 1}, {"Weight": 72, "from": "Tyson", "to": "Chiron", "width": 1}, {"Weight": 51, "from": "Tyson", "to": "Percy", "width": 1}, {"Weight": 47, "from": "Tyson", "to": "Briares", "width": 1}, {"Weight": 42, "from": "Tyson", "to": "Cyclopes", "width": 1}, {"Weight": 38, "from": "Tyson", "to": "Poseidon", "width": 1}, {"Weight": 36, "from": "Tyson", "to": "Nico", "width": 1}, {"Weight": 36, "from": "Tyson", "to": "Geryon", "width": 1}, {"Weight": 24, "from": "Tyson", "to": "Kronos", "width": 1}, {"Weight": 19, "from": "Tyson", "to": "Rachel", "width": 1}, {"Weight": 19, "from": "Tyson", "to": "Luke", "width": 1}, {"Weight": 18, "from": "Tyson", "to": "Pan", "width": 1}, {"Weight": 16, "from": "Tyson", "to": "Clarisse", "width": 1}, {"Weight": 14, "from": "Tyson", "to": "Athena", "width": 1}, {"Weight": 14, "from": "Tyson", "to": "Kelli", "width": 1}, {"Weight": 13, "from": "Tyson", "to": "Hera", "width": 1}, {"Weight": 10, "from": "Tyson", "to": "Demeter", "width": 1}, {"Weight": 9, "from": "Tyson", "to": "Hades", "width": 1}, {"Weight": 8, "from": "Tyson", "to": "Ares", "width": 1}, {"Weight": 6, "from": "Tyson", "to": "Apollo", "width": 1}, {"Weight": 6, "from": "Tyson", "to": "Hermes", "width": 1}, {"Weight": 5, "from": "Tyson", "to": "Calypso", "width": 1}, {"Weight": 4, "from": "Tyson", "to": "Daedalus", "width": 1}, {"Weight": 4, "from": "Tyson", "to": "Zeus", "width": 1}, {"Weight": 4, "from": "Tyson", "to": "Bianca", "width": 1}, {"Weight": 2, "from": "Tyson", "to": "Juniper", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Silena", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Aphrodite", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Antaeus", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Medusa", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Atlas", "width": 1}, {"Weight": 1, "from": "Tyson", "to": "Artemis", "width": 1}, {"Weight": 102, "from": "Rachel", "to": "Kelli", "width": 1}, {"Weight": 34, "from": "Rachel", "to": "Nico", "width": 1}, {"Weight": 32, "from": "Rachel", "to": "Luke", "width": 1}, {"Weight": 29, "from": "Rachel", "to": "Grover", "width": 1}, {"Weight": 20, "from": "Rachel", "to": "Pan", "width": 1}, {"Weight": 13, "from": "Rachel", "to": "Daedalus", "width": 1}, {"Weight": 11, "from": "Rachel", "to": "Kronos", "width": 1}, {"Weight": 8, "from": "Rachel", "to": "Furies", "width": 1}, {"Weight": 8, "from": "Rachel", "to": "Ethan", "width": 1}, {"Weight": 6, "from": "Rachel", "to": "Percy", "width": 1}, {"Weight": 5, "from": "Rachel", "to": "Hades", "width": 1}, {"Weight": 5, "from": "Rachel", "to": "Cyclopes", "width": 1}, {"Weight": 4, "from": "Rachel", "to": "Antaeus", "width": 1}, {"Weight": 2, "from": "Rachel", "to": "Athena", "width": 1}, {"Weight": 1, "from": "Rachel", "to": "Chiron", "width": 1}, {"Weight": 120, "from": "Grover", "to": "Pan", "width": 1}, {"Weight": 70, "from": "Grover", "to": "Chiron", "width": 1}, {"Weight": 43, "from": "Grover", "to": "Percy", "width": 1}, {"Weight": 24, "from": "Grover", "to": "Geryon", "width": 1}, {"Weight": 17, "from": "Grover", "to": "Clarisse", "width": 1}, {"Weight": 10, "from": "Grover", "to": "Calypso", "width": 1}, {"Weight": 9, "from": "Grover", "to": "Juniper", "width": 1}, {"Weight": 8, "from": "Grover", "to": "Aphrodite", "width": 1}, {"Weight": 8, "from": "Grover", "to": "Athena", "width": 1}, {"Weight": 7, "from": "Grover", "to": "Nico", "width": 1}, {"Weight": 6, "from": "Grover", "to": "Kronos", "width": 1}, {"Weight": 6, "from": "Grover", "to": "Daedalus", "width": 1}, {"Weight": 5, "from": "Grover", "to": "Hera", "width": 1}, {"Weight": 5, "from": "Grover", "to": "Castor", "width": 1}, {"Weight": 4, "from": "Grover", "to": "Circe", "width": 1}, {"Weight": 4, "from": "Grover", "to": "Bianca", "width": 1}, {"Weight": 3, "from": "Grover", "to": "Zeus", "width": 1}, {"Weight": 2, "from": "Grover", "to": "Poseidon", "width": 1}, {"Weight": 2, "from": "Grover", "to": "Luke", "width": 1}, {"Weight": 1, "from": "Grover", "to": "Ares", "width": 1}, {"Weight": 1, "from": "Grover", "to": "Nemesis", "width": 1}, {"Weight": 1, "from": "Grover", "to": "Briares", "width": 1}, {"Weight": 1, "from": "Grover", "to": "Atlas", "width": 1}, {"Weight": 1, "from": "Grover", "to": "Argus", "width": 1}, {"Weight": 78, "from": "Chiron", "to": "Percy", "width": 1}, {"Weight": 59, "from": "Chiron", "to": "Kronos", "width": 1}, {"Weight": 56, "from": "Chiron", "to": "Luke", "width": 1}, {"Weight": 52, "from": "Chiron", "to": "Clarisse", "width": 1}, {"Weight": 40, "from": "Chiron", "to": "Pan", "width": 1}, {"Weight": 29, "from": "Chiron", "to": "Nico", "width": 1}, {"Weight": 19, "from": "Chiron", "to": "Juniper", "width": 1}, {"Weight": 17, "from": "Chiron", "to": "Daedalus", "width": 1}, {"Weight": 15, "from": "Chiron", "to": "Hermes", "width": 1}, {"Weight": 11, "from": "Chiron", "to": "Kelli", "width": 1}, {"Weight": 9, "from": "Chiron", "to": "Geryon", "width": 1}, {"Weight": 9, "from": "Chiron", "to": "Apollo", "width": 1}, {"Weight": 8, "from": "Chiron", "to": "Poseidon", "width": 1}, {"Weight": 8, "from": "Chiron", "to": "Zeus", "width": 1}, {"Weight": 6, "from": "Chiron", "to": "Lee", "width": 1}, {"Weight": 6, "from": "Chiron", "to": "Calypso", "width": 1}, {"Weight": 5, "from": "Chiron", "to": "Ares", "width": 1}, {"Weight": 5, "from": "Chiron", "to": "Artemis", "width": 1}, {"Weight": 5, "from": "Chiron", "to": "Hades", "width": 1}, {"Weight": 5, "from": "Chiron", "to": "Oracle", "width": 1}, {"Weight": 4, "from": "Chiron", "to": "Travis", "width": 1}, {"Weight": 4, "from": "Chiron", "to": "Castor", "width": 1}, {"Weight": 4, "from": "Chiron", "to": "Cyclopes", "width": 1}, {"Weight": 4, "from": "Chiron", "to": "Argus", "width": 1}, {"Weight": 2, "from": "Chiron", "to": "Athena", "width": 1}, {"Weight": 2, "from": "Chiron", "to": "Silena", "width": 1}, {"Weight": 1, "from": "Chiron", "to": "Briares", "width": 1}, {"Weight": 90, "from": "Luke", "to": "Kronos", "width": 1}, {"Weight": 55, "from": "Luke", "to": "Kelli", "width": 1}, {"Weight": 54, "from": "Luke", "to": "Clarisse", "width": 1}, {"Weight": 41, "from": "Luke", "to": "Antaeus", "width": 1}, {"Weight": 33, "from": "Luke", "to": "Daedalus", "width": 1}, {"Weight": 30, "from": "Luke", "to": "Ethan", "width": 1}, {"Weight": 29, "from": "Luke", "to": "Percy", "width": 1}, {"Weight": 21, "from": "Luke", "to": "Nico", "width": 1}, {"Weight": 19, "from": "Luke", "to": "Hermes", "width": 1}, {"Weight": 15, "from": "Luke", "to": "Juniper", "width": 1}, {"Weight": 14, "from": "Luke", "to": "Geryon", "width": 1}, {"Weight": 11, "from": "Luke", "to": "Poseidon", "width": 1}, {"Weight": 10, "from": "Luke", "to": "Athena", "width": 1}, {"Weight": 10, "from": "Luke", "to": "Hyperion", "width": 1}, {"Weight": 9, "from": "Luke", "to": "Thalia", "width": 1}, {"Weight": 8, "from": "Luke", "to": "Pan", "width": 1}, {"Weight": 8, "from": "Luke", "to": "Hera", "width": 1}, {"Weight": 6, "from": "Luke", "to": "Hades", "width": 1}, {"Weight": 5, "from": "Luke", "to": "Bianca", "width": 1}, {"Weight": 1, "from": "Luke", "to": "Lee", "width": 1}, {"Weight": 1, "from": "Luke", "to": "Calypso", "width": 1}, {"Weight": 1, "from": "Luke", "to": "Aphrodite", "width": 1}, {"Weight": 1, "from": "Luke", "to": "Atlas", "width": 1}, {"Weight": 1, "from": "Luke", "to": "Oracle", "width": 1}, {"Weight": 5, "from": "Pan", "to": "Morpheus", "width": 1}, {"Weight": 5, "from": "Pan", "to": "Kronos", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Percy", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Medusa", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Poseidon", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Ares", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Nico", "width": 1}, {"Weight": 4, "from": "Pan", "to": "Geryon", "width": 1}, {"Weight": 2, "from": "Pan", "to": "Clarisse", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Apollo", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Castor", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Zeus", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Hades", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Briares", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Argus", "width": 1}, {"Weight": 1, "from": "Pan", "to": "Athena", "width": 1}, {"Weight": 51, "from": "Percy", "to": "Poseidon", "width": 1}, {"Weight": 33, "from": "Percy", "to": "Nico", "width": 1}, {"Weight": 25, "from": "Percy", "to": "Calypso", "width": 1}, {"Weight": 25, "from": "Percy", "to": "Kelli", "width": 1}, {"Weight": 22, "from": "Percy", "to": "Geryon", "width": 1}, {"Weight": 19, "from": "Percy", "to": "Daedalus", "width": 1}, {"Weight": 18, "from": "Percy", "to": "Clarisse", "width": 1}, {"Weight": 16, "from": "Percy", "to": "Bianca", "width": 1}, {"Weight": 15, "from": "Percy", "to": "Kronos", "width": 1}, {"Weight": 13, "from": "Percy", "to": "Athena", "width": 1}, {"Weight": 13, "from": "Percy", "to": "Sally", "width": 1}, {"Weight": 8, "from": "Percy", "to": "Artemis", "width": 1}, {"Weight": 5, "from": "Percy", "to": "Hades", "width": 1}, {"Weight": 4, "from": "Percy", "to": "Ethan", "width": 1}, {"Weight": 4, "from": "Percy", "to": "Ares", "width": 1}, {"Weight": 4, "from": "Percy", "to": "Juniper", "width": 1}, {"Weight": 3, "from": "Percy", "to": "Hera", "width": 1}, {"Weight": 1, "from": "Percy", "to": "Hermes", "width": 1}, {"Weight": 1, "from": "Percy", "to": "Zeus", "width": 1}, {"Weight": 1, "from": "Percy", "to": "Antaeus", "width": 1}, {"Weight": 19, "from": "Clarisse", "to": "Ares", "width": 1}, {"Weight": 19, "from": "Clarisse", "to": "Poseidon", "width": 1}, {"Weight": 9, "from": "Clarisse", "to": "Hades", "width": 1}, {"Weight": 6, "from": "Clarisse", "to": "Travis", "width": 1}, {"Weight": 5, "from": "Clarisse", "to": "Oracle", "width": 1}, {"Weight": 4, "from": "Clarisse", "to": "Minotaur", "width": 1}, {"Weight": 4, "from": "Clarisse", "to": "Demeter", "width": 1}, {"Weight": 1, "from": "Clarisse", "to": "Daedalus", "width": 1}, {"Weight": 1, "from": "Clarisse", "to": "Geryon", "width": 1}, {"Weight": 49, "from": "Kronos", "to": "Nico", "width": 1}, {"Weight": 17, "from": "Kronos", "to": "Poseidon", "width": 1}, {"Weight": 14, "from": "Kronos", "to": "Daedalus", "width": 1}, {"Weight": 11, "from": "Kronos", "to": "Ethan", "width": 1}, {"Weight": 10, "from": "Kronos", "to": "Geryon", "width": 1}, {"Weight": 10, "from": "Kronos", "to": "Zeus", "width": 1}, {"Weight": 9, "from": "Kronos", "to": "Hera", "width": 1}, {"Weight": 5, "from": "Kronos", "to": "Bianca", "width": 1}, {"Weight": 5, "from": "Kronos", "to": "Kelli", "width": 1}, {"Weight": 5, "from": "Kronos", "to": "Hades", "width": 1}, {"Weight": 4, "from": "Kronos", "to": "Atlas", "width": 1}, {"Weight": 4, "from": "Kronos", "to": "Artemis", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Sally", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Calypso", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Ares", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Morpheus", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Juniper", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Cyclopes", "width": 1}, {"Weight": 1, "from": "Kronos", "to": "Athena", "width": 1}, {"Weight": 13, "from": "Athena", "to": "Zeus", "width": 1}, {"Weight": 12, "from": "Athena", "to": "Daedalus", "width": 1}, {"Weight": 8, "from": "Athena", "to": "Silena", "width": 1}, {"Weight": 5, "from": "Athena", "to": "Demeter", "width": 1}, {"Weight": 4, "from": "Athena", "to": "Argus", "width": 1}, {"Weight": 4, "from": "Athena", "to": "Nico", "width": 1}, {"Weight": 4, "from": "Athena", "to": "Hestia", "width": 1}, {"Weight": 1, "from": "Athena", "to": "Geryon", "width": 1}, {"Weight": 1, "from": "Athena", "to": "Hades", "width": 1}, {"Weight": 1, "from": "Athena", "to": "Kelli", "width": 1}, {"Weight": 1, "from": "Athena", "to": "Artemis", "width": 1}, {"Weight": 1, "from": "Athena", "to": "Ares", "width": 1}, {"Weight": 15, "from": "Kelli", "to": "Daedalus", "width": 1}, {"Weight": 10, "from": "Kelli", "to": "Nico", "width": 1}, {"Weight": 7, "from": "Kelli", "to": "Hades", "width": 1}, {"Weight": 2, "from": "Kelli", "to": "Furies", "width": 1}, {"Weight": 1, "from": "Kelli", "to": "Hermes", "width": 1}, {"Weight": 1, "from": "Kelli", "to": "Antaeus", "width": 1}, {"Weight": 64, "from": "Nico", "to": "Geryon", "width": 1}, {"Weight": 39, "from": "Nico", "to": "Bianca", "width": 1}, {"Weight": 23, "from": "Nico", "to": "Hades", "width": 1}, {"Weight": 9, "from": "Nico", "to": "Daedalus", "width": 1}, {"Weight": 9, "from": "Nico", "to": "Poseidon", "width": 1}, {"Weight": 5, "from": "Nico", "to": "Artemis", "width": 1}, {"Weight": 5, "from": "Nico", "to": "Lee", "width": 1}, {"Weight": 5, "from": "Nico", "to": "Apollo", "width": 1}, {"Weight": 4, "from": "Nico", "to": "Hermes", "width": 1}, {"Weight": 2, "from": "Nico", "to": "Calypso", "width": 1}, {"Weight": 24, "from": "Geryon", "to": "Apollo", "width": 1}, {"Weight": 15, "from": "Geryon", "to": "Poseidon", "width": 1}, {"Weight": 10, "from": "Geryon", "to": "Ares", "width": 1}, {"Weight": 9, "from": "Geryon", "to": "Artemis", "width": 1}, {"Weight": 6, "from": "Geryon", "to": "Hera", "width": 1}, {"Weight": 1, "from": "Geryon", "to": "Bianca", "width": 1}, {"Weight": 16, "from": "Hera", "to": "Zeus", "width": 1}, {"Weight": 8, "from": "Hera", "to": "Morpheus", "width": 1}, {"Weight": 8, "from": "Hera", "to": "Daedalus", "width": 1}, {"Weight": 4, "from": "Hera", "to": "Hades", "width": 1}, {"Weight": 4, "from": "Hera", "to": "Cyclopes", "width": 1}, {"Weight": 1, "from": "Hera", "to": "Poseidon", "width": 1}, {"Weight": 1, "from": "Hera", "to": "Bianca", "width": 1}, {"Weight": 9, "from": "Daedalus", "to": "Ethan", "width": 1}, {"Weight": 4, "from": "Daedalus", "to": "Antaeus", "width": 1}, {"Weight": 4, "from": "Daedalus", "to": "Aphrodite", "width": 1}, {"Weight": 4, "from": "Daedalus", "to": "Zeus", "width": 1}, {"Weight": 1, "from": "Daedalus", "to": "Castor", "width": 1}, {"Weight": 1, "from": "Daedalus", "to": "Bianca", "width": 1}, {"Weight": 1, "from": "Daedalus", "to": "Morpheus", "width": 1}, {"Weight": 23, "from": "Poseidon", "to": "Antaeus", "width": 1}, {"Weight": 17, "from": "Poseidon", "to": "Zeus", "width": 1}, {"Weight": 11, "from": "Poseidon", "to": "Calypso", "width": 1}, {"Weight": 6, "from": "Poseidon", "to": "Hermes", "width": 1}, {"Weight": 6, "from": "Poseidon", "to": "Sally", "width": 1}, {"Weight": 5, "from": "Poseidon", "to": "Bianca", "width": 1}, {"Weight": 5, "from": "Poseidon", "to": "Hades", "width": 1}, {"Weight": 4, "from": "Poseidon", "to": "Silena", "width": 1}, {"Weight": 4, "from": "Poseidon", "to": "Demeter", "width": 1}, {"Weight": 1, "from": "Poseidon", "to": "Aphrodite", "width": 1}, {"Weight": 1, "from": "Poseidon", "to": "Circe", "width": 1}, {"Weight": 4, "from": "Briares", "to": "Apollo", "width": 1}, {"Weight": 1, "from": "Briares", "to": "Medusa", "width": 1}, {"Weight": 10, "from": "Cyclopes", "to": "Zeus", "width": 1}, {"Weight": 33, "from": "Antaeus", "to": "Ethan", "width": 1}, {"Weight": 4, "from": "Antaeus", "to": "Hades", "width": 1}, {"Weight": 17, "from": "Bianca", "to": "Hades", "width": 1}, {"Weight": 6, "from": "Bianca", "to": "Artemis", "width": 1}, {"Weight": 4, "from": "Bianca", "to": "Hermes", "width": 1}, {"Weight": 4, "from": "Juniper", "to": "Oracle", "width": 1}, {"Weight": 5, "from": "Ethan", "to": "Hermes", "width": 1}, {"Weight": 4, "from": "Ethan", "to": "Atlas", "width": 1}, {"Weight": 5, "from": "Zeus", "to": "Hermes", "width": 1}, {"Weight": 4, "from": "Zeus", "to": "Castor", "width": 1}, {"Weight": 4, "from": "Zeus", "to": "Nemesis", "width": 1}, {"Weight": 1, "from": "Zeus", "to": "Morpheus", "width": 1}, {"Weight": 1, "from": "Zeus", "to": "Aphrodite", "width": 1}, {"Weight": 10, "from": "Calypso", "to": "Aphrodite", "width": 1}, {"Weight": 8, "from": "Calypso", "to": "Atlas", "width": 1}, {"Weight": 4, "from": "Calypso", "to": "Circe", "width": 1}, {"Weight": 11, "from": "Apollo", "to": "Artemis", "width": 1}, {"Weight": 4, "from": "Apollo", "to": "Castor", "width": 1}, {"Weight": 4, "from": "Apollo", "to": "Medusa", "width": 1}, {"Weight": 4, "from": "Hades", "to": "Hermes", "width": 1}, {"Weight": 5, "from": "Ares", "to": "Aphrodite", "width": 1}, {"Weight": 8, "from": "Hermes", "to": "Aphrodite", "width": 1}, {"Weight": 4, "from": "Hermes", "to": "Demeter", "width": 1}, {"Weight": 5, "from": "Artemis", "to": "Hestia", "width": 1}, {"Weight": 1, "from": "Demeter", "to": "Silena", "width": 1}, {"Weight": 1, "from": "Atlas", "to": "Aphrodite", "width": 1}, {"Weight": 4, "from": "Aphrodite", "to": "Silena", "width": 1}, {"Weight": 4, "from": "Morpheus", "to": "Nemesis", "width": 1}, {"Weight": 1, "from": "Castor", "to": "Nemesis", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -2000,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
